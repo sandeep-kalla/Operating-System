@@ -11,6 +11,7 @@ struct Process
   int turnaround;
 };
 
+// function to calculate the completion time.
 void completionTime(vector<Process> &p, int n, vector<int> &gantt, vector<int> &startTimes, vector<int> &endTimes)
 {
   int currentTime = 0, completed = 0;
@@ -46,6 +47,7 @@ void completionTime(vector<Process> &p, int n, vector<int> &gantt, vector<int> &
   }
 }
 
+// function to calculate turn around time.
 void turnaroundTime(vector<Process> &p, int n)
 {
   for (int i = 0; i < n; i++)
@@ -54,6 +56,7 @@ void turnaroundTime(vector<Process> &p, int n)
   }
 }
 
+// function to calculate the waiting time.
 void waitingTime(vector<Process> &p, int n)
 {
   for (int i = 0; i < n; i++)
@@ -62,6 +65,7 @@ void waitingTime(vector<Process> &p, int n)
   }
 }
 
+// function to print the table.
 void print(vector<Process> &p, int n)
 {
   cout << "SJF Non-Preemptive Scheduling:\n";
@@ -81,13 +85,13 @@ void print(vector<Process> &p, int n)
   }
 }
 
+// function to print the gantt chart.
 void printGanttChart(const vector<int> &gantt, const vector<int> &startTimes, const vector<int> &endTimes)
 {
   cout << "Gantt Chart:\n";
 
-  // Print the top line
   cout << "+";
-  for (size_t i = 0; i < gantt.size(); i++)
+  for (int i = 0; i < gantt.size(); i++)
   {
     for (int j = 0; j < 5; j++)
       cout << "-";
@@ -96,14 +100,13 @@ void printGanttChart(const vector<int> &gantt, const vector<int> &startTimes, co
   cout << "\n|";
 
   // Print the process IDs
-  for (size_t i = 0; i < gantt.size(); i++)
+  for (int i = 0; i < gantt.size(); i++)
   {
     cout << " P" << gantt[i] << "  |";
   }
   cout << "\n+";
 
-  // Print the bottom line
-  for (size_t i = 0; i < gantt.size(); i++)
+  for (int i = 0; i < gantt.size(); i++)
   {
     for (int j = 0; j < 5; j++)
       cout << "-";
@@ -113,7 +116,7 @@ void printGanttChart(const vector<int> &gantt, const vector<int> &startTimes, co
 
   // Print the start and end times
   cout << startTimes[0];
-  for (size_t i = 0; i < endTimes.size(); i++)
+  for (int i = 0; i < endTimes.size(); i++)
   {
     int spaces = 5 - to_string(endTimes[i]).length();
     for (int j = 0; j <= spaces; j++)
@@ -123,6 +126,7 @@ void printGanttChart(const vector<int> &gantt, const vector<int> &startTimes, co
   cout << "\n\n\n";
 }
 
+// main driver function.
 void SJFN(vector<Process> &p, int n, vector<int> &gantt, vector<int> &startTimes, vector<int> &endTimes)
 {
   completionTime(p, n, gantt, startTimes, endTimes);
@@ -130,6 +134,7 @@ void SJFN(vector<Process> &p, int n, vector<int> &gantt, vector<int> &startTimes
   waitingTime(p, n);
 }
 
+// function to take user input for arrival and burst time.
 void input(vector<Process> &Processes, int n)
 {
   for (int i = 0; i < n; i++)

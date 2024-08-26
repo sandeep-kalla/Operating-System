@@ -12,6 +12,7 @@ struct Process
   int turnaround;
 };
 
+// function to calculate completion time.
 void completionTime(vector<Process> &p, int n, vector<int> &gantt, vector<int> &startTimes, vector<int> &endTimes)
 {
   int currentTime = 0, completed = 0, lastProcess = -1;
@@ -49,7 +50,7 @@ void completionTime(vector<Process> &p, int n, vector<int> &gantt, vector<int> &
         p[idx].completion = currentTime;
         completed++;
         endTimes.push_back(currentTime);
-        lastProcess = -1; // Reset lastProcess to ensure correct gantt chart update
+        lastProcess = -1; // Reset lastProcess
       }
     }
     else
@@ -59,6 +60,7 @@ void completionTime(vector<Process> &p, int n, vector<int> &gantt, vector<int> &
   }
 }
 
+// function to calculate the turn around time.
 void turnaroundTime(vector<Process> &p, int n)
 {
   for (int i = 0; i < n; i++)
@@ -67,6 +69,7 @@ void turnaroundTime(vector<Process> &p, int n)
   }
 }
 
+// function to calculate the waiting time.
 void waitingTime(vector<Process> &p, int n)
 {
   for (int i = 0; i < n; i++)
@@ -75,6 +78,7 @@ void waitingTime(vector<Process> &p, int n)
   }
 }
 
+// function to print table.
 void print(vector<Process> &p, int n)
 {
   cout << "SJF Preemptive (SRTF) Scheduling:\n";
@@ -94,11 +98,11 @@ void print(vector<Process> &p, int n)
   }
 }
 
+// function to print gantt chart.
 void printGanttChart(const vector<int> &gantt, const vector<int> &startTimes, const vector<int> &endTimes)
 {
   cout << "Gantt Chart:\n";
 
-  // Print the top line
   cout << "+";
   for (size_t i = 0; i < gantt.size(); i++)
   {
@@ -115,7 +119,6 @@ void printGanttChart(const vector<int> &gantt, const vector<int> &startTimes, co
   }
   cout << "\n+";
 
-  // Print the bottom line
   for (size_t i = 0; i < gantt.size(); i++)
   {
     for (int j = 0; j < 5; j++)
@@ -136,6 +139,7 @@ void printGanttChart(const vector<int> &gantt, const vector<int> &startTimes, co
   cout << "\n\n\n";
 }
 
+// main driver function.
 void SJFP(vector<Process> &p, int n, vector<int> &gantt, vector<int> &startTimes, vector<int> &endTimes)
 {
   completionTime(p, n, gantt, startTimes, endTimes);
@@ -143,6 +147,7 @@ void SJFP(vector<Process> &p, int n, vector<int> &gantt, vector<int> &startTimes
   waitingTime(p, n);
 }
 
+// function to take user input for arrival and burst time.
 void input(vector<Process> &Processes, int n)
 {
   for (int i = 0; i < n; i++)
