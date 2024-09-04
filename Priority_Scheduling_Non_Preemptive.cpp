@@ -12,6 +12,7 @@ struct Process
     int arrival;
     int burst;
     int priority;
+    int remainingBurst;
     int completion;
     int waiting;
     int turnaround;
@@ -25,6 +26,7 @@ void input(vector<Process> &processes, int n)
         p.id = i + 1;
         cout << "Enter arrival time, burst time, and priority for process " << p.id << ": ";
         cin >> p.arrival >> p.burst >> p.priority;
+        p.remainingBurst = p.burst; // Initialize remaining burst time
         processes.push_back(p);
     }
 }
@@ -33,16 +35,17 @@ void completionTime(vector<Process> &processes, int n, vector<pair<int, int>> &g
 {
     int currentTime = 0;
     int completed = 0;
+    int lastProcessId = -1; // To track the process in the last Gantt chart entry
 
     while (completed < n)
     {
-        // Find the process with the highest priority that has arrived
+        // Find the process with the highest priority that has arrived and is not completed
         int idx = -1;
         int highestPriority = INT_MAX;
 
         for (int i = 0; i < n; i++)
         {
-            if (processes[i].arrival <= currentTime && processes[i].completion == 0)
+            if (processes[i].arrival <= currentTime && processes[i].remainingBurst > 0)
             {
                 if (processes[i].priority < highestPriority)
                 {
@@ -54,17 +57,30 @@ void completionTime(vector<Process> &processes, int n, vector<pair<int, int>> &g
 
         if (idx != -1)
         {
-            ganttChart.push_back({processes[idx].id, currentTime});
+            // Update Gantt chart if the process changes
+            if (lastProcessId != processes[idx].id)
+            {
+                ganttChart.push_back({processes[idx].id, currentTime});
+                lastProcessId = processes[idx].id;
+            }
 
-            currentTime += processes[idx].burst;
-            processes[idx].completion = currentTime;
-            completed++;
+            // Execute the selected process for 1 unit of time
+            processes[idx].remainingBurst--;
+            currentTime++;
 
+            // If the process is completed
+            if (processes[idx].remainingBurst == 0)
+            {
+                processes[idx].completion = currentTime;
+                completed++;
+            }
+
+            // Update the end time in Gantt chart
             ganttChart.back().second = currentTime;
         }
         else
         {
-            currentTime++;
+            currentTime++; // If no process is found, increase the current time
         }
     }
 }
@@ -87,7 +103,7 @@ void waitingTime(vector<Process> &processes, int n)
 
 void printTable(const vector<Process> &processes, int n)
 {
-    cout << "Priority Scheduling:" << endl;
+    cout << "Priority Preemptive Scheduling:" << endl;
     cout << "+----+--------------+--------------+------------+-------------------+-------------------+--------------+" << endl;
     cout << "| PID| Arrival Time |  Burst Time  |  Priority  |  Completion Time  |  TurnAround Time  | Waiting Time |" << endl;
     cout << "+----+--------------+--------------+------------+-------------------+-------------------+--------------+" << endl;
@@ -162,7 +178,7 @@ int main()
     vector<Process> processes;
     input(processes, n);
 
-    cout << "\n\n--- Priority Scheduling ---\n";
+    cout << "\n\n--- Priority Preemptive Scheduling ---\n";
     PriorityScheduling(processes, n);
 
     return 0;
